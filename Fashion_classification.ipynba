@@ -1,0 +1,259 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Fashion classification.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyPEca78j7UzqO89x+kpLDqf",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Abdoceo/Fashion-classification-model/blob/main/Fashion_classification.ipynba\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "git clone https://github.com/alexeygrigorev/clothing-dataset-small.git"
+      ],
+      "metadata": {
+        "id": "RCMjex0VuAAR"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!git clone github.com:alexeygrigorev/clothing-dataset-small.git https://github.com/alexeygrigorev/clothing-dataset-small.git"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0jGnYTWVywxr",
+        "outputId": "72b50948-e8ae-4069-9ca9-8d4de064e8e9"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cloning into 'clothing-dataset-small'...\n",
+            "Host key verification failed.\n",
+            "fatal: Could not read from remote repository.\n",
+            "\n",
+            "Please make sure you have the correct access rights\n",
+            "and the repository exists.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "XegsYxqzrQV1"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "%matplotlib inline"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install tensorflow"
+      ],
+      "metadata": {
+        "id": "vcl4j4j_sIzD"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import tensorflow as tf\n",
+        "from tensorflow import keras\n",
+        "from tensorflow.keras.preprocessing.image import load_img"
+      ],
+      "metadata": {
+        "id": "nSUF51Q6sJA2"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "path =  './clothing-dataset-small/train/dress' \n",
+        "name =  '041c6bde-e737-46fd-9586-984c1503941f.jpg'\n",
+        "fullname = f'{path}/{name}'\n",
+        "load_img(fullname)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 345
+        },
+        "id": "bXjCo1VutOZM",
+        "outputId": "2559917f-ac43-452f-ffa6-8276662814be"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "FileNotFoundError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mFileNotFoundError\u001b[0m                         Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-20-e674def2a363>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0mname\u001b[0m \u001b[0;34m=\u001b[0m  \u001b[0;34m'041c6bde-e737-46fd-9586-984c1503941f.jpg'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0mfullname\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;34mf'{path}/{name}'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 4\u001b[0;31m \u001b[0mload_img\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfullname\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.7/dist-packages/keras/preprocessing/image.py\u001b[0m in \u001b[0;36mload_img\u001b[0;34m(path, grayscale, color_mode, target_size, interpolation)\u001b[0m\n\u001b[1;32m    312\u001b[0m   \"\"\"\n\u001b[1;32m    313\u001b[0m   return image.load_img(path, grayscale=grayscale, color_mode=color_mode,\n\u001b[0;32m--> 314\u001b[0;31m                         target_size=target_size, interpolation=interpolation)\n\u001b[0m\u001b[1;32m    315\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    316\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.7/dist-packages/keras_preprocessing/image/utils.py\u001b[0m in \u001b[0;36mload_img\u001b[0;34m(path, grayscale, color_mode, target_size, interpolation)\u001b[0m\n\u001b[1;32m    111\u001b[0m         raise ImportError('Could not import PIL.Image. '\n\u001b[1;32m    112\u001b[0m                           'The use of `load_img` requires PIL.')\n\u001b[0;32m--> 113\u001b[0;31m     \u001b[0;32mwith\u001b[0m \u001b[0mopen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mpath\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'rb'\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0mf\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    114\u001b[0m         \u001b[0mimg\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpil_image\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mopen\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mio\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mBytesIO\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mf\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    115\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mcolor_mode\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;34m'grayscale'\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mFileNotFoundError\u001b[0m: [Errno 2] No such file or directory: './clothing-dataset-small/train/dress/041c6bde-e737-46fd-9586-984c1503941f.jpg'"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**##############################**"
+      ],
+      "metadata": {
+        "id": "wEJfb__i1UsO"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install matplotlib-venn"
+      ],
+      "metadata": {
+        "id": "1GOrenVV5-Fq"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from tensorflow.keras.applications.Xception import xception"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 304
+        },
+        "id": "7InKbctwyhJL",
+        "outputId": "a1ebb2ab-1afd-4c32-9a8d-b877adb5bc2b"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "ModuleNotFoundError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-10-544d5a432a3e>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0;32mfrom\u001b[0m \u001b[0mtensorflow\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mkeras\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mapplications\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mXception\u001b[0m \u001b[0;32mimport\u001b[0m \u001b[0mxception\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'tensorflow.keras.applications.Xception'",
+            "",
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0;32m\nNOTE: If your import is failing due to a missing package, you can\nmanually install dependencies using either !pip or !apt.\n\nTo view examples of installing some common dependencies, click the\n\"Open Examples\" button below.\n\u001b[0;31m---------------------------------------------------------------------------\u001b[0m\n"
+          ],
+          "errorDetails": {
+            "actions": [
+              {
+                "action": "open_url",
+                "actionText": "Open Examples",
+                "url": "/notebooks/snippets/importing_libraries.ipynb"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "model =xception(weights ='imagenet' , input_shape=(299, 299, 3))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 165
+        },
+        "id": "q0cVViRMtOzT",
+        "outputId": "e1e2a472-7b46-49c9-adad-68443811ed05"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-23-b22e2001a436>\u001b[0m in \u001b[0;36m<module>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mmodel\u001b[0m \u001b[0;34m=\u001b[0m\u001b[0mxception\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mweights\u001b[0m \u001b[0;34m=\u001b[0m\u001b[0;34m'imagenet'\u001b[0m \u001b[0;34m,\u001b[0m \u001b[0minput_shape\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;36m299\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m299\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;36m3\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'xception' is not defined"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "fBwkCxH7tPHN"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "0bplBmhbtPPZ"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "VyfPhkNatPXn"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
